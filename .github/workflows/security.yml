@@ -52,7 +52,7 @@ jobs:
       - name: CloudFormation lint
         run: |
           python3 -m pip install --user cfn-lint
-          python3 -m cfnlint cloudformation/dingodocs-fargate.yaml
+          ~/.local/bin/cfn-lint cloudformation/dingodocs-fargate.yaml
 
   checkov:
     name: Checkov

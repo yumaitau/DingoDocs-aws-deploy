@@ -32,10 +32,14 @@ locals {
   # Known at plan time so terraform test can assert these without decoding
   # container_definitions (that JSON includes computed secret ARNs and URLs).
   container_hardening = {
-    user       = "1001:1001"
-    privileged = false
+    user           = "1001:1001"
+    privileged     = false
+    mountPoints    = []
+    systemControls = []
+    volumesFrom    = []
     linuxParameters = {
       capabilities = {
+        add  = []
         drop = ["ALL"]
       }
     }

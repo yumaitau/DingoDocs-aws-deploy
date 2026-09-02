@@ -11,7 +11,7 @@ Both images contain seller-compiled Marketplace identity and validate entitlemen
 
 ## ECS Fargate with Terraform
 
-Terraform creates a two-AZ VPC, ALB, private ECS tasks, RDS PostgreSQL 16, KMS-encrypted S3 evidence storage, Secrets Manager, CloudWatch logging, optional WAF, and optional AWS Backup.
+Terraform creates a two-AZ VPC, ALB, ECS tasks with private NAT egress by default, RDS PostgreSQL 16, KMS-encrypted S3 evidence storage, Secrets Manager, CloudWatch logging, optional WAF, and optional AWS Backup. An explicit NAT-less mode is available for accounts without spare Elastic IP quota; task ingress remains restricted to the ALB security group.
 
 ```sh
 git clone https://github.com/yumaitau/DingoDocs-aws-deploy.git
@@ -66,7 +66,7 @@ No administrator account is seeded. The first user registers at `/sign-up`, then
 
 ## Security defaults
 
-- private application and data subnets; no public task or database address
+- private application and data subnets by default; NAT-less mode gives tasks public egress IPs without opening inbound access, while the database always remains private
 - explicit ALB ingress CIDRs; world-open ingress requires an opt-in flag
 - non-root UID/GID 1001 and all Linux capabilities dropped
 - KMS encryption, S3 public-access block, versioning, access logs, and TLS-only policies

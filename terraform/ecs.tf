@@ -95,11 +95,12 @@ resource "aws_ecs_task_definition" "migration" {
 
   container_definitions = jsonencode([
     merge(local.container_hardening, {
-      name        = "migration"
-      image       = var.migrator_image
-      essential   = true
-      environment = concat(local.common_environment, local.ses_environment)
-      secrets     = local.common_secrets
+      name         = "migration"
+      image        = var.migrator_image
+      essential    = true
+      portMappings = []
+      environment  = concat(local.common_environment, local.ses_environment)
+      secrets      = local.common_secrets
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -143,7 +144,7 @@ resource "aws_ecs_service" "web" {
   }
 
   network_configuration {
-    assign_public_ip = false
+    assign_public_ip = !var.use_nat_gateway
     security_groups  = [aws_security_group.tasks.id]
     subnets          = aws_subnet.application[*].id
   }

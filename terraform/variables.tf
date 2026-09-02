@@ -128,6 +128,12 @@ variable "single_nat_gateway" {
   default     = true
 }
 
+variable "use_nat_gateway" {
+  type        = bool
+  description = "Keep Fargate tasks in private application subnets behind NAT. Disable only when NAT is unavailable or unnecessary; tasks then receive public egress IPs but accept inbound traffic only from the ALB security group."
+  default     = true
+}
+
 variable "enable_services" {
   type        = bool
   description = "Create the web service. Bootstrap keeps this false until migration succeeds."

@@ -24,6 +24,11 @@ Amazon EKS buyers use the same Marketplace image via `../charts/dingodocs` and `
 
 Never put secrets in `terraform.tfvars`, shell history, or committed files. Terraform state contains generated database/application secrets; use an encrypted remote backend with restricted access for production.
 
+NAT egress is the default. Accounts without spare Elastic IP quota can set
+`use_nat_gateway = false`. Fargate tasks then receive public egress IPs in the
+application subnets, while their security group still accepts inbound port
+3000 only from the ALB security group. RDS remains isolated and private.
+
 ## Clean-account deployment
 
 The stack creates Secrets Manager, RDS, and S3. First visitor registers at
@@ -92,6 +97,7 @@ allow_internet_ingress         = false
 database_multi_az              = true
 database_deletion_protection   = true
 single_nat_gateway             = false
+use_nat_gateway                = true
 enable_aws_backup              = true
 force_destroy_backup_vault     = false
 force_destroy_evidence_bucket  = false

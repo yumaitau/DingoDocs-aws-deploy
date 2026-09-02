@@ -44,8 +44,13 @@ output "web_service_arn" {
 }
 
 output "application_subnet_ids" {
-  description = "Private subnets for Fargate tasks."
+  description = "Application subnets for Fargate tasks."
   value       = aws_subnet.application[*].id
+}
+
+output "fargate_assign_public_ip" {
+  description = "AWS CLI network mode used by one-shot Fargate tasks."
+  value       = var.use_nat_gateway ? "DISABLED" : "ENABLED"
 }
 
 output "task_security_group_id" {

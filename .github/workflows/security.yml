@@ -12,7 +12,7 @@ permissions:
 jobs:
   fmt-validate:
     name: Terraform and Helm
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,7 +56,7 @@ jobs:
 
   checkov:
     name: Checkov
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
@@ -82,7 +82,7 @@ jobs:
 
   gitleaks:
     name: Gitleaks
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -100,7 +100,7 @@ jobs:
 
   trivy-vulnerabilities:
     name: Trivy dependency vulnerabilities
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
@@ -128,7 +128,7 @@ jobs:
 
   trivy-secrets-and-misconfigurations:
     name: Trivy secrets and misconfigurations
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read

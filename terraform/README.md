@@ -67,7 +67,7 @@ This stack always creates the services DingoDocs needs to boot:
 - RDS PostgreSQL 16
 - KMS-encrypted S3 evidence bucket + S3 gateway endpoint
 - Secrets Manager, CloudWatch logs
-- ECS execution role + task role with S3/KMS and License Manager `CheckoutLicense`
+- ECS execution role + task role with S3/KMS and License Manager checkout, extension, and check-in permissions
 
 S3 is not a later add-on. Evidence uploads use this bucket. Do not tell operators to invent a second IAM role “for TLS in front of the instance”. TLS is an ACM certificate on the ALB (or their own proxy). IAM for S3/SES/License Manager already lives on the ECS **task** role.
 

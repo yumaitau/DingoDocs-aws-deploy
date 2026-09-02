@@ -1,0 +1,44 @@
+# AWS Marketplace overlay for Amazon EKS.
+# Same image as terraform/. Helm Quick Launch is retired; this file is the
+# EKS buyer path.
+#
+# Helm does not create RDS, S3, ACM, or SES. Provision those first.
+# Production evidence storage is S3.
+# HTTPS terminates on your Ingress / NLB / ALB — not an extra IAM role.
+# Email is optional: leave EMAIL_PROVIDER=none until a verified identity exists.
+# First user still registers at /sign-up with no mail.
+#
+#   helm upgrade --install dingodocs charts/dingodocs \
+#     --namespace dingodocs --create-namespace \
+#     -f charts/dingodocs/values-aws-marketplace.yaml \
+#     --set image.repository=<marketplace-application-repository> \
+#     --set image.tag=<immutable-tag> \
+#     --set migratorImage.repository=<marketplace-migrator-repository> \
+#     --set migratorImage.tag=<immutable-tag> \
+#     --set env.APP_URL=https://dingodocs.example.com \
+#     --set env.BETTER_AUTH_URL=https://dingodocs.example.com \
+#     --set env.TRUSTED_ORIGINS=https://dingodocs.example.com \
+#     --set env.S3_BUCKET=<your-bucket> \
+#     --set existingSecret=dingodocs-runtime
+#
+# Pin both image tags to published immutable Marketplace tags. Marketplace ECR
+# pulls need an entitled subscription, not a GitHub token.
+#
+# The Marketplace image validates its entitlement at startup. Licensing cannot
+# be disabled through Helm values or environment variables. CheckoutLicense uses
+# the pod IRSA role. Set serviceAccount.annotations.eks.amazonaws.com/role-arn
+# and attach iam-policy.json plus S3/KMS (and ses:SendEmail if using SES).
+# The migrator image runs as an init container before each web Pod. DingoDocs
+# serializes concurrent migration starts with a PostgreSQL advisory lock.
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  # eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/dingodocs
+
+env:
+  AWS_REGION: ap-southeast-2
+  S3_REGION: ap-southeast-2

@@ -1,0 +1,118 @@
+replicaCount: 2
+
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+
+migratorImage:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+env:
+  NODE_ENV: production
+  NEXT_TELEMETRY_DISABLED: "1"
+  APP_URL: https://dingodocs.example.com
+  BETTER_AUTH_URL: https://dingodocs.example.com
+  TRUSTED_ORIGINS: https://dingodocs.example.com
+  REQUIRE_EMAIL_VERIFICATION: "false"
+  EMAIL_PROVIDER: none
+  STORAGE_PROVIDER: s3
+  PORT: "3000"
+  S3_FORCE_PATH_STYLE: "false"
+  # The containers run with a read-only root filesystem, so npm must keep its
+  # cache and logs under the writable /tmp mount instead of the home directory.
+  NPM_CONFIG_CACHE: "/tmp/.npm"
+  NPM_CONFIG_UPDATE_NOTIFIER: "false"
+
+secretEnv:
+  DATABASE_URL: ""
+  BETTER_AUTH_SECRET: ""
+  INTEGRATION_ENCRYPTION_KEY: ""
+
+existingSecret: ""
+extraEnvFrom: []
+extraEnv: []
+
+web:
+  command: []
+  args: []
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  startupProbe:
+    path: /api/health
+    periodSeconds: 10
+    failureThreshold: 18
+  readinessProbe:
+    path: /api/ready
+    initialDelaySeconds: 10
+  livenessProbe:
+    path: /api/health
+    initialDelaySeconds: 30
+
+migration:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 25m
+  hosts:
+    - host: dingodocs.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+postgresql:
+  external:
+    recommended: true
+    note: Use managed Postgres in production and provide DATABASE_URL through secretEnv or existingSecret.
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

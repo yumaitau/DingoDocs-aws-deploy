@@ -1,0 +1,13 @@
+apiVersion: v2
+name: dingodocs
+description: Helm chart for deploying DingoDocs to Kubernetes
+type: application
+version: 0.2.0
+appVersion: "0.1.0"
+keywords:
+  - penetration-testing
+  - reporting
+  - security
+home: https://github.com/yumaitau/DingoDocs-aws-deploy
+sources:
+  - https://github.com/yumaitau/DingoDocs-aws-deploy

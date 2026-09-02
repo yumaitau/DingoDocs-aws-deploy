@@ -1,0 +1,30 @@
+[
+  {
+    "ParameterKey": "NamePrefix",
+    "ParameterValue": "dingodocs"
+  },
+  {
+    "ParameterKey": "Environment",
+    "ParameterValue": "prod"
+  },
+  {
+    "ParameterKey": "ContainerImage",
+    "ParameterValue": "REPLACE_WITH_MARKETPLACE_APPLICATION_IMAGE:VERSION"
+  },
+  {
+    "ParameterKey": "MigratorImage",
+    "ParameterValue": "REPLACE_WITH_MARKETPLACE_MIGRATOR_IMAGE:VERSION"
+  },
+  {
+    "ParameterKey": "AllowedIngressCidr",
+    "ParameterValue": "203.0.113.0/24"
+  },
+  {
+    "ParameterKey": "AllowInternetIngress",
+    "ParameterValue": "false"
+  },
+  {
+    "ParameterKey": "EnableWebService",
+    "ParameterValue": "false"
+  }
+]

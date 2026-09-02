@@ -87,6 +87,11 @@ run "secure_test_baseline" {
   }
 
   assert {
+    condition     = length(aws_nat_gateway.this) == 1
+    error_message = "The secure baseline must retain one NAT gateway."
+  }
+
+  assert {
     condition     = aws_ecs_service.web[0].deployment_circuit_breaker[0].enable && !aws_ecs_service.web[0].deployment_circuit_breaker[0].rollback
     error_message = "First-create services must not request circuit-breaker rollback; ECS has no prior revision."
   }
@@ -106,6 +111,34 @@ run "secure_test_baseline" {
   assert {
     condition     = aws_flow_log.this.traffic_type == "ALL"
     error_message = "VPC flow logs must capture all traffic."
+  }
+}
+
+run "natless_fargate_egress" {
+  command = plan
+
+  variables {
+    use_nat_gateway = false
+  }
+
+  assert {
+    condition     = length(aws_eip.nat) == 0 && length(aws_nat_gateway.this) == 0
+    error_message = "NAT-less mode must not allocate an Elastic IP or NAT gateway."
+  }
+
+  assert {
+    condition     = aws_ecs_service.web[0].network_configuration[0].assign_public_ip == true
+    error_message = "NAT-less web tasks need public egress IPs."
+  }
+
+  assert {
+    condition     = length(aws_route.application_internet) == 2 && length(aws_route.application_nat) == 0
+    error_message = "NAT-less application subnets must route through the internet gateway."
+  }
+
+  assert {
+    condition     = aws_subnet.application[0].tags.Tier == "public-egress-application"
+    error_message = "NAT-less application subnets must not be labelled private."
   }
 }
 

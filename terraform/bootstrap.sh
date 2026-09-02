@@ -94,7 +94,8 @@ local_name=$(terraform output -raw stack_name)
 migration_definition=$(terraform output -raw migration_task_definition_arn)
 security_group=$(terraform output -raw task_security_group_id)
 subnets=$(terraform output -json application_subnet_ids | jq -r 'join(",")')
-network="awsvpcConfiguration={subnets=[${subnets}],securityGroups=[${security_group}],assignPublicIp=DISABLED}"
+assign_public_ip=$(terraform output -raw fargate_assign_public_ip)
+network="awsvpcConfiguration={subnets=[${subnets}],securityGroups=[${security_group}],assignPublicIp=${assign_public_ip}}"
 
 run_task() {
   local label=$1
@@ -159,7 +160,7 @@ fi
 
 application_url=$(terraform output -raw application_url)
 for attempt in $(seq 1 30); do
-  if live_response=$(curl -fsS "${application_url}/api/health") && ready_response=$(curl -fsS "${application_url}/api/ready"); then
+  if health_response=$(curl -fsS "${application_url}/api/health") && ready_response=$(curl -fsS "${application_url}/api/ready"); then
     break
   fi
   if [[ "${attempt}" == "30" ]]; then
@@ -197,13 +198,13 @@ cat >"${evidence_file}" <<EOF
 
 ## Probe results
 
-\`/api/ready\`:
+\`/api/health\`:
 
 \`\`\`json
-$(printf '%s' "${live_response}" | jq -c .)
+$(printf '%s' "${health_response}" | jq -c .)
 \`\`\`
 
-\`/api/health\`:
+\`/api/ready\`:
 
 \`\`\`json
 $(printf '%s' "${ready_response}" | jq -c .)

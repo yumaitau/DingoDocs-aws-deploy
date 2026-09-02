@@ -4,7 +4,7 @@ Buyer launch path: clone https://github.com/yumaitau/DingoDocs-aws-deploy and st
 
 Terraform reference stack for a buyer-owned deployment in `ap-southeast-2`:
 
-- Two-AZ VPC with public ALB subnets, private Fargate subnets, isolated data subnets, NAT egress, and an S3 gateway endpoint.
+- Two-AZ VPC with public ALB subnets, isolated data subnets, an S3 gateway endpoint, and application subnets using either private NAT egress or public internet egress.
 - ECS Fargate `X86_64` task definitions for the web service and one-shot migrator.
 - RDS PostgreSQL 16 with no public route or public address.
 - KMS-encrypted, versioned, public-blocked S3 evidence bucket.
@@ -68,7 +68,7 @@ Outputs never contain secret values.
 
 This stack always creates the services DingoDocs needs to boot:
 
-- VPC, NAT, ALB, ECS Fargate web service and migration task definition
+- VPC, ALB, ECS Fargate web service and migration task definition, plus NAT gateways when `use_nat_gateway = true`
 - RDS PostgreSQL 16
 - KMS-encrypted S3 evidence bucket + S3 gateway endpoint
 - Secrets Manager, CloudWatch logs

@@ -158,6 +158,8 @@ resource "aws_ecs_service" "web" {
   depends_on = [
     aws_lb_listener.http,
     aws_lb_listener.https,
+    aws_route.application_nat,
+    aws_route.application_internet,
     aws_iam_role_policy_attachment.execution,
     aws_db_instance.this,
   ]

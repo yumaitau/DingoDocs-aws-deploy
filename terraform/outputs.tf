@@ -84,6 +84,6 @@ output "stack_name" {
 }
 
 output "marketplace_license_enforcement" {
-  description = "Marketplace images always enforce CheckoutLicense. Deployment configuration cannot disable it."
+  description = "Marketplace images always enforce the License Manager lease lifecycle. Deployment configuration cannot disable it."
   value       = "mandatory"
 }

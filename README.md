@@ -39,7 +39,7 @@ Upload `dingodocs-fargate.yaml` in CloudFormation or follow the complete [CloudF
 
 ## Amazon EKS with Helm
 
-The Helm chart does not create RDS, S3, ACM, or SES. Provision those first and attach an IRSA role with `license-manager:CheckoutLicense`, scoped S3/KMS access, and optional `ses:SendEmail`.
+The Helm chart does not create RDS, S3, ACM, or SES. Provision those first and attach an IRSA role with `license-manager:CheckoutLicense`, `license-manager:ExtendLicenseConsumption`, and `license-manager:CheckInLicense`, scoped S3/KMS access, and optional `ses:SendEmail`.
 
 ```sh
 helm upgrade --install dingodocs charts/dingodocs \

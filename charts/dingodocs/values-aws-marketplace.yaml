@@ -25,7 +25,7 @@
 # pulls need an entitled subscription, not a GitHub token.
 #
 # The Marketplace image validates its entitlement at startup. Licensing cannot
-# be disabled through Helm values or environment variables. CheckoutLicense uses
+# be disabled through Helm values or environment variables. License Manager uses
 # the pod IRSA role. Set serviceAccount.annotations.eks.amazonaws.com/role-arn
 # and attach iam-policy.json plus S3/KMS (and ses:SendEmail if using SES).
 # The migrator image runs as an init container before each web Pod. DingoDocs

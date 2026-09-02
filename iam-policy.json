@@ -4,7 +4,11 @@
     {
       "Sid": "AwsMarketplaceContainerLicense",
       "Effect": "Allow",
-      "Action": "license-manager:CheckoutLicense",
+      "Action": [
+        "license-manager:CheckInLicense",
+        "license-manager:CheckoutLicense",
+        "license-manager:ExtendLicenseConsumption"
+      ],
       "Resource": "*"
     }
   ]

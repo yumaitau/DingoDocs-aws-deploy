@@ -2,13 +2,13 @@
 
 Native CloudFormation for buyers who do not use Terraform. The stack creates a two-AZ VPC, ALB, ECS Fargate web and migration task definitions, RDS PostgreSQL 16, Secrets Manager, KMS, and a private S3 evidence bucket.
 
-Subscribe to DingoDocs on AWS Marketplace before creating the stack. Set `ContainerImage` to an immutable Marketplace ECR reference, not GHCR. Legacy `MigratorImage` input is ignored.
+Subscribe to DingoDocs on AWS Marketplace before creating the stack. Set `ContainerImage` to an immutable Marketplace ECR reference, not GHCR. The same image runs the application and migrations.
 
 ## Console
 
 1. Open CloudFormation in the target Region.
 2. Create a stack with new resources and upload `dingodocs-fargate.yaml`.
-3. Pin **Marketplace application image** and **Marketplace migrator image** to published immutable listing tags or digests.
+3. Pin **Marketplace application image** to a published immutable listing tag or digest.
 4. Set **Allowed ingress CIDR** to an office, VPN, or client range. `0.0.0.0/0` is rejected unless **Allow internet ingress** is explicitly true.
 5. Leave the ACM certificate and SES From identity empty only for a restricted proof deployment.
 6. Keep **Create web service** false, acknowledge IAM capabilities, and create the stack.

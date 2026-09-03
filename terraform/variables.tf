@@ -55,20 +55,6 @@ variable "container_image" {
   }
 }
 
-variable "migrator_image" {
-  type        = string
-  description = "Deprecated compatibility input. Ignored; the migration task always uses container_image."
-  default     = "unused:compat"
-
-  validation {
-    condition = (
-      can(regex("(@sha256:[0-9a-f]{64}|:[A-Za-z0-9][A-Za-z0-9_.-]{0,127})$", var.migrator_image)) &&
-      !can(regex(":[Ll][Aa][Tt][Ee][Ss][Tt]$", var.migrator_image))
-    )
-    error_message = "migrator_image must end in an immutable tag or sha256 digest; floating tags are not allowed."
-  }
-}
-
 variable "container_registry_credentials_secret_arn" {
   type        = string
   description = "Optional Secrets Manager ARN containing private registry credentials as {username,password}. Omit when container_image is an AWS Marketplace ECR URI."

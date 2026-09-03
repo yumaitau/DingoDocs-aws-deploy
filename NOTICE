@@ -5,6 +5,6 @@ This repository contains Terraform, Helm, CloudFormation, and IAM artifacts
 for deploying the DingoDocs container product in a buyer AWS account.
 
 These deployment artifacts and the DingoDocs source are Apache-2.0 licensed.
-Access to Marketplace application and migrator images requires a DingoDocs AWS
+Access to the Marketplace application image requires a DingoDocs AWS
 Marketplace subscription and is also subject to the listing terms. Use only the
 image references shown to subscribed buyers by AWS Marketplace.

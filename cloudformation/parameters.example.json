@@ -12,10 +12,6 @@
     "ParameterValue": "REPLACE_WITH_MARKETPLACE_APPLICATION_IMAGE:VERSION"
   },
   {
-    "ParameterKey": "MigratorImage",
-    "ParameterValue": "REPLACE_WITH_MARKETPLACE_MIGRATOR_IMAGE:VERSION"
-  },
-  {
     "ParameterKey": "AllowedIngressCidr",
     "ParameterValue": "203.0.113.0/24"
   },

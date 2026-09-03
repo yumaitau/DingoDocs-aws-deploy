@@ -7,7 +7,7 @@ The listing supplies one immutable image. Buyer templates use it in two roles:
 - application command: standalone Next.js server with built-in background jobs
 - migration command: bundled `node dist/migrate.cjs`
 
-The image contains seller-compiled Marketplace identity and validates entitlement through AWS License Manager. Runtime environment variables cannot disable or retarget licensing. Set both existing image inputs to the same published immutable tag or digest; never use `latest` or guess an image URI.
+The image contains seller-compiled Marketplace identity and validates entitlement through AWS License Manager. Runtime environment variables cannot disable or retarget licensing. Set the image input to the published immutable tag or digest; never use `latest` or guess an image URI.
 
 ## ECS Fargate with Terraform
 
@@ -17,7 +17,7 @@ Terraform creates a two-AZ VPC, ALB, ECS tasks with private NAT egress by defaul
 git clone https://github.com/yumaitau/DingoDocs-aws-deploy.git
 cd DingoDocs-aws-deploy/terraform
 cp terraform.tfvars.example terraform.tfvars
-# Set container_image and allowed_ingress_cidrs.
+# Review allowed_ingress_cidrs. The example pins the DingoDocs 1.0.0 image.
 ./bootstrap.sh -var-file=terraform.tfvars
 terraform output application_url
 ```
@@ -32,21 +32,21 @@ CloudFormation provides the same single-NAT proof topology for console users. Th
 git clone https://github.com/yumaitau/DingoDocs-aws-deploy.git
 cd DingoDocs-aws-deploy/cloudformation
 cp parameters.example.json parameters.json
-# Set both Marketplace images and AllowedIngressCidr.
+# Review AllowedIngressCidr. The example pins the DingoDocs 1.0.0 image.
 ```
 
 Upload `dingodocs-fargate.yaml` in CloudFormation or follow the complete [CloudFormation launch guide](cloudformation/README.md).
 
 ## Amazon EKS with Helm
 
-The Helm chart does not create RDS, S3, ACM, or SES. Provision those first and attach an IRSA role with `license-manager:CheckoutLicense`, `license-manager:ExtendLicenseConsumption`, and `license-manager:CheckInLicense`, scoped S3/KMS access, and optional `ses:SendEmail`.
+The Helm chart does not create RDS, S3, ACM, or SES. Provision those first and attach an IRSA role with `license-manager:CheckoutLicense` and `license-manager:CheckInLicense`, scoped S3/KMS access, and optional `ses:SendEmail`.
 
 ```sh
 helm upgrade --install dingodocs charts/dingodocs \
   --namespace dingodocs --create-namespace \
   -f charts/dingodocs/values-aws-marketplace.yaml \
-  --set image.repository=<marketplace-application-repository> \
-  --set image.tag=<immutable-tag> \
+  --set image.repository=709825985650.dkr.ecr.us-east-1.amazonaws.com/yuma-it/dingodocs-aws-v2 \
+  --set image.tag=sha-b482227 \
   --set env.APP_URL=https://dingodocs.example.com \
   --set env.BETTER_AUTH_URL=https://dingodocs.example.com \
   --set env.TRUSTED_ORIGINS=https://dingodocs.example.com \
@@ -69,7 +69,7 @@ No administrator account is seeded. The first user registers at `/sign-up`, then
 - non-root UID/GID 1001 and all Linux capabilities dropped
 - KMS encryption, S3 public-access block, versioning, access logs, and TLS-only policies
 - generated application/database secrets; no static AWS access keys
-- immutable application and migrator references
+- one immutable image for the application and migration command
 - fail-closed Marketplace validation before HTTP or migrations
 
 ## Cost and teardown

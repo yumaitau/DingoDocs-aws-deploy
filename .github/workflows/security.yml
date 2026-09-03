@@ -39,14 +39,10 @@ jobs:
           helm lint charts/dingodocs \
             --set image.repository=example.invalid/dingodocs \
             --set image.tag=sha-ci \
-            --set migratorImage.repository=example.invalid/dingodocs-migrator \
-            --set migratorImage.tag=sha-ci \
             --set existingSecret=dingodocs-runtime
           helm template dingodocs charts/dingodocs \
             --set image.repository=example.invalid/dingodocs \
             --set image.tag=sha-ci \
-            --set migratorImage.repository=example.invalid/dingodocs-migrator \
-            --set migratorImage.tag=sha-ci \
             --set existingSecret=dingodocs-runtime >/dev/null
 
       - name: CloudFormation lint

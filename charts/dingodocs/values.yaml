@@ -5,6 +5,7 @@ image:
   tag: ""
   pullPolicy: IfNotPresent
 
+# Deprecated compatibility values. Migration always uses image.repository/tag.
 migratorImage:
   repository: ""
   tag: ""

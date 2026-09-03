@@ -76,8 +76,9 @@ Parameters:
 
   MigratorImage:
     Type: String
+    Default: unused:compat
     AllowedPattern: "^(?!.*:[Ll][Aa][Tt][Ee][Ss][Tt]$).*(@sha256:[0-9a-f]{64}|:[A-Za-z0-9][A-Za-z0-9_.-]{0,127})$"
-    Description: Same immutable Marketplace image as ContainerImage; runs bundled dist/migrate.cjs. Do not use :latest.
+    Description: Deprecated compatibility input. Ignored; migration always uses ContainerImage.
 
   VpcCidr:
     Type: String
@@ -1209,7 +1210,7 @@ Resources:
         OperatingSystemFamily: LINUX
       ContainerDefinitions:
         - Name: migration
-          Image: !Ref MigratorImage
+          Image: !Ref ContainerImage
           Command:
             - node
             - dist/migrate.cjs
@@ -1345,8 +1346,8 @@ Outputs:
     Value: !Ref ContainerImage
 
   MigratorImage:
-    Description: Migration image.
-    Value: !Ref MigratorImage
+    Description: Image used by the migration task.
+    Value: !Ref ContainerImage
 
   EcsClusterName:
     Description: ECS cluster used by services and one-shot tasks.

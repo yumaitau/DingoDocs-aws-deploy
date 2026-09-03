@@ -57,7 +57,8 @@ variable "container_image" {
 
 variable "migrator_image" {
   type        = string
-  description = "DingoDocs Marketplace image used with its bundled dist/migrate.cjs command. Use the same immutable reference as container_image."
+  description = "Deprecated compatibility input. Ignored; the migration task always uses container_image."
+  default     = "unused:compat"
 
   validation {
     condition = (

@@ -9,8 +9,8 @@ output "container_image" {
 }
 
 output "migrator_image" {
-  description = "Immutable migration image reference."
-  value       = var.migrator_image
+  description = "Immutable image reference used by the migration task."
+  value       = var.container_image
 }
 
 output "migration_log_group_name" {

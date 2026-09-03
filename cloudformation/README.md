@@ -2,7 +2,7 @@
 
 Native CloudFormation for buyers who do not use Terraform. The stack creates a two-AZ VPC, ALB, ECS Fargate web and migration task definitions, RDS PostgreSQL 16, Secrets Manager, KMS, and a private S3 evidence bucket.
 
-Subscribe to DingoDocs on AWS Marketplace before creating the stack. Set both image parameters to the same immutable Marketplace ECR reference, not GHCR.
+Subscribe to DingoDocs on AWS Marketplace before creating the stack. Set `ContainerImage` to an immutable Marketplace ECR reference, not GHCR. Legacy `MigratorImage` input is ignored.
 
 ## Console
 
@@ -22,7 +22,7 @@ When the update is `UPDATE_COMPLETE`, open `ApplicationUrl`. The first user regi
 ```sh
 cd cloudformation
 cp parameters.example.json parameters.json
-# Edit both image references and AllowedIngressCidr. Keep EnableWebService=false.
+# Edit ContainerImage and AllowedIngressCidr. Keep EnableWebService=false.
 
 aws cloudformation deploy \
   --stack-name dingodocs \

@@ -4,7 +4,6 @@ environment     = "prod"
 # Pin to a Marketplace ECR tag or digest that already exists.
 # Do not invent a version tag. Do not use :latest.
 container_image = "REPLACE_WITH_MARKETPLACE_APPLICATION_IMAGE:VERSION"
-migrator_image  = "REPLACE_WITH_MARKETPLACE_MIGRATOR_IMAGE:VERSION"
 
 # Marketplace product identity is baked into the image.
 # Do not set AWS_MARKETPLACE_* environment variables to disable licensing.

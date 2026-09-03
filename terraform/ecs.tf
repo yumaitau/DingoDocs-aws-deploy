@@ -96,8 +96,9 @@ resource "aws_ecs_task_definition" "migration" {
   container_definitions = jsonencode([
     merge(local.container_hardening, {
       name         = "migration"
-      image        = var.migrator_image
+      image        = var.container_image
       essential    = true
+      command      = ["node", "dist/migrate.cjs"]
       portMappings = []
       environment  = concat(local.common_environment, local.ses_environment)
       secrets      = local.common_secrets

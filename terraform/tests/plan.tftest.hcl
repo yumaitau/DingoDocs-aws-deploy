@@ -26,7 +26,6 @@ mock_provider "random" {
 
 variables {
   container_image       = "ghcr.io/yumaitau/dingodocs@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-  migrator_image        = "ghcr.io/yumaitau/dingodocs-migrator@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
   allowed_ingress_cidrs = ["203.0.113.0/24"]
   cpu_architecture      = "X86_64"
 }
@@ -211,16 +210,6 @@ run "reject_latest_image" {
   }
 
   expect_failures = [var.container_image]
-}
-
-run "reject_latest_migrator_image" {
-  command = plan
-
-  variables {
-    migrator_image = "ghcr.io/yumaitau/dingodocs-migrator:latest"
-  }
-
-  expect_failures = [var.migrator_image]
 }
 
 run "reject_unproven_region" {

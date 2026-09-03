@@ -173,7 +173,6 @@ done
 
 account_id=$(terraform output -raw aws_account_id)
 image=$(terraform output -raw container_image)
-migrator_image=$(terraform output -raw migrator_image)
 web_definition=$(terraform output -raw web_task_definition_arn)
 bucket=$(terraform output -raw evidence_bucket_name)
 log_group=$(terraform output -raw migration_log_group_name)
@@ -188,7 +187,6 @@ cat >"${evidence_file}" <<EOF
 - Region: ${region}
 - URL: ${application_url}
 - Image: \`${image}\`
-- Migrator image: \`${migrator_image}\`
 - Web task definition: \`${web_definition}\`
 - Migration task: \`${migration_task_arn}\`
 - Storage proof task: \`${storage_task_arn}\`

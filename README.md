@@ -2,12 +2,12 @@
 
 Public buyer-owned deployment artifacts for DingoDocs on AWS Marketplace. Subscribe before pulling either image or creating a deployment. DingoDocs data remains in the buyer's AWS account.
 
-The listing supplies two immutable image references:
+The listing supplies one immutable image. Buyer templates use it in two roles:
 
-- application image: standalone Next.js server with built-in background jobs
-- migrator image: one-shot Drizzle PostgreSQL migrations
+- application command: standalone Next.js server with built-in background jobs
+- migration command: bundled `node dist/migrate.cjs`
 
-Both images contain seller-compiled Marketplace identity and validate entitlement through AWS License Manager. Runtime environment variables cannot disable or retarget licensing. Pin published immutable tags or digests; never use `latest` or guess an image URI.
+The image contains seller-compiled Marketplace identity and validates entitlement through AWS License Manager. Runtime environment variables cannot disable or retarget licensing. Set both existing image inputs to the same published immutable tag or digest; never use `latest` or guess an image URI.
 
 ## ECS Fargate with Terraform
 
@@ -17,7 +17,7 @@ Terraform creates a two-AZ VPC, ALB, ECS tasks with private NAT egress by defaul
 git clone https://github.com/yumaitau/DingoDocs-aws-deploy.git
 cd DingoDocs-aws-deploy/terraform
 cp terraform.tfvars.example terraform.tfvars
-# Set container_image, migrator_image, and allowed_ingress_cidrs.
+# Set container_image and allowed_ingress_cidrs.
 ./bootstrap.sh -var-file=terraform.tfvars
 terraform output application_url
 ```
@@ -47,8 +47,6 @@ helm upgrade --install dingodocs charts/dingodocs \
   -f charts/dingodocs/values-aws-marketplace.yaml \
   --set image.repository=<marketplace-application-repository> \
   --set image.tag=<immutable-tag> \
-  --set migratorImage.repository=<marketplace-migrator-repository> \
-  --set migratorImage.tag=<immutable-tag> \
   --set env.APP_URL=https://dingodocs.example.com \
   --set env.BETTER_AUTH_URL=https://dingodocs.example.com \
   --set env.TRUSTED_ORIGINS=https://dingodocs.example.com \
@@ -56,7 +54,7 @@ helm upgrade --install dingodocs charts/dingodocs \
   --set existingSecret=dingodocs-runtime
 ```
 
-The existing secret must contain `DATABASE_URL`, `BETTER_AUTH_SECRET`, and `INTEGRATION_ENCRYPTION_KEY`. Each Pod runs the separate migrator image as an init container; a PostgreSQL advisory lock serializes concurrent rollout migrations, and the web container cannot start until migration succeeds. See comments in [Marketplace values](charts/dingodocs/values-aws-marketplace.yaml).
+The existing secret must contain `DATABASE_URL`, `BETTER_AUTH_SECRET`, and `INTEGRATION_ENCRYPTION_KEY`. Each Pod runs the same image's bundled migrator as an init container; a PostgreSQL advisory lock serializes concurrent rollout migrations, and the web container cannot start until migration succeeds. See comments in [Marketplace values](charts/dingodocs/values-aws-marketplace.yaml).
 
 ## Email and first sign-in
 

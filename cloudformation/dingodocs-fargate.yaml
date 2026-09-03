@@ -20,7 +20,6 @@ Metadata:
           default: Marketplace
         Parameters:
           - ContainerImage
-          - MigratorImage
       - Label:
           default: Names
         Parameters:
@@ -49,8 +48,6 @@ Metadata:
     ParameterLabels:
       ContainerImage:
         default: Marketplace application image
-      MigratorImage:
-        default: Marketplace migrator image
       CertificateArn:
         default: ACM certificate ARN (HTTPS)
       SesFromEmail:
@@ -73,11 +70,6 @@ Parameters:
     Type: String
     AllowedPattern: "^(?!.*:[Ll][Aa][Tt][Ee][Ss][Tt]$).*(@sha256:[0-9a-f]{64}|:[A-Za-z0-9][A-Za-z0-9_.-]{0,127})$"
     Description: Marketplace application image tag or digest. Do not use :latest.
-
-  MigratorImage:
-    Type: String
-    AllowedPattern: "^(?!.*:[Ll][Aa][Tt][Ee][Ss][Tt]$).*(@sha256:[0-9a-f]{64}|:[A-Za-z0-9][A-Za-z0-9_.-]{0,127})$"
-    Description: Marketplace migrator image tag or digest. Do not use :latest.
 
   VpcCidr:
     Type: String
@@ -889,6 +881,8 @@ Resources:
               - license-manager:CheckInLicense
               - license-manager:CheckoutLicense
               - license-manager:ExtendLicenseConsumption
+              - license-manager:GetLicense
+              - license-manager:ListReceivedLicenses
             Resource: "*"
 
   Cluster:
@@ -1207,7 +1201,10 @@ Resources:
         OperatingSystemFamily: LINUX
       ContainerDefinitions:
         - Name: migration
-          Image: !Ref MigratorImage
+          Image: !Ref ContainerImage
+          Command:
+            - node
+            - dist/migrate.cjs
           Essential: true
           User: "1001:1001"
           Privileged: false
@@ -1338,10 +1335,6 @@ Outputs:
   ContainerImage:
     Description: Application image.
     Value: !Ref ContainerImage
-
-  MigratorImage:
-    Description: Migration image.
-    Value: !Ref MigratorImage
 
   EcsClusterName:
     Description: ECS cluster used by services and one-shot tasks.

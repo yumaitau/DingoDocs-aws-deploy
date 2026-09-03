@@ -8,11 +8,6 @@ output "container_image" {
   value       = var.container_image
 }
 
-output "migrator_image" {
-  description = "Immutable migration image reference."
-  value       = var.migrator_image
-}
-
 output "migration_log_group_name" {
   description = "CloudWatch log group for migration and storage proof tasks."
   value       = aws_cloudwatch_log_group.migration.name

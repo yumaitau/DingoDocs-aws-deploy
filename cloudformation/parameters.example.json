@@ -9,7 +9,7 @@
   },
   {
     "ParameterKey": "ContainerImage",
-    "ParameterValue": "REPLACE_WITH_MARKETPLACE_APPLICATION_IMAGE:VERSION"
+    "ParameterValue": "709825985650.dkr.ecr.us-east-1.amazonaws.com/yuma-it/dingodocs-aws-v2:sha-b482227"
   },
   {
     "ParameterKey": "AllowedIngressCidr",

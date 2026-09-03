@@ -880,7 +880,6 @@ Resources:
             Action:
               - license-manager:CheckInLicense
               - license-manager:CheckoutLicense
-              - license-manager:ExtendLicenseConsumption
               - license-manager:GetLicense
               - license-manager:ListReceivedLicenses
             Resource: "*"

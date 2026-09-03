@@ -11,8 +11,8 @@
 #   helm upgrade --install dingodocs charts/dingodocs \
 #     --namespace dingodocs --create-namespace \
 #     -f charts/dingodocs/values-aws-marketplace.yaml \
-#     --set image.repository=<marketplace-application-repository> \
-#     --set image.tag=<immutable-tag> \
+#     --set image.repository=709825985650.dkr.ecr.us-east-1.amazonaws.com/yuma-it/dingodocs-aws-v2 \
+#     --set image.tag=sha-b482227 \
 #     --set env.APP_URL=https://dingodocs.example.com \
 #     --set env.BETTER_AUTH_URL=https://dingodocs.example.com \
 #     --set env.TRUSTED_ORIGINS=https://dingodocs.example.com \
@@ -28,6 +28,10 @@
 # and attach iam-policy.json plus S3/KMS (and ses:SendEmail if using SES).
 # The same image runs its bundled migrator as an init container before each web Pod. DingoDocs
 # serializes concurrent migration starts with a PostgreSQL advisory lock.
+
+image:
+  repository: 709825985650.dkr.ecr.us-east-1.amazonaws.com/yuma-it/dingodocs-aws-v2
+  tag: sha-b482227
 
 imagePullSecrets: []
 

@@ -124,7 +124,6 @@ data "aws_iam_policy_document" "task" {
     actions = [
       "license-manager:CheckInLicense",
       "license-manager:CheckoutLicense",
-      "license-manager:ExtendLicenseConsumption",
       "license-manager:GetLicense",
       "license-manager:ListReceivedLicenses",
     ]

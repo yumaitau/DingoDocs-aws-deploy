@@ -18,8 +18,8 @@ Amazon EKS buyers use the same Marketplace image via `../charts/dingodocs` and `
 - Terraform 1.8 or newer.
 - AWS CLI authenticated to the intended account.
 - `jq` and `curl` for `bootstrap.sh`.
-- Immutable DingoDocs application and migrator images containing `linux/amd64`.
-- AWS Marketplace buyers: set `container_image` and `migrator_image` to existing Marketplace ECR digests. No GitHub token. Licensing is enforced by both images.
+- One immutable DingoDocs image containing `linux/amd64` and `linux/arm64`; the migration task runs its bundled `dist/migrate.cjs` command.
+- AWS Marketplace buyers: set `container_image` and `migrator_image` to the same existing Marketplace ECR digest. No GitHub token. Licensing is enforced for both roles.
 - Private GHCR only: existing Secrets Manager secret containing exactly `{"username":"...","password":"..."}`. Password must be a GitHub token with `read:packages`.
 
 Never put secrets in `terraform.tfvars`, shell history, or committed files. Terraform state contains generated database/application secrets; use an encrypted remote backend with restricted access for production.

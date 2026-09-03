@@ -2,12 +2,12 @@
 
 Public buyer-owned deployment artifacts for DingoDocs on AWS Marketplace. Subscribe before pulling either image or creating a deployment. DingoDocs data remains in the buyer's AWS account.
 
-The listing supplies two immutable image references:
+The listing supplies one immutable image. Buyer templates use it in two roles:
 
-- application image: standalone Next.js server with built-in background jobs
-- migrator image: one-shot Drizzle PostgreSQL migrations
+- application command: standalone Next.js server with built-in background jobs
+- migration command: bundled `node dist/migrate.cjs`
 
-Both images contain seller-compiled Marketplace identity and validate entitlement through AWS License Manager. Runtime environment variables cannot disable or retarget licensing. Pin published immutable tags or digests; never use `latest` or guess an image URI.
+The image contains seller-compiled Marketplace identity and validates entitlement through AWS License Manager. Runtime environment variables cannot disable or retarget licensing. Set both existing image inputs to the same published immutable tag or digest; never use `latest` or guess an image URI.
 
 ## ECS Fargate with Terraform
 

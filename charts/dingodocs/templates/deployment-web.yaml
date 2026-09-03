@@ -36,6 +36,7 @@ spec:
         - name: migration
           image: "{{ required "migratorImage.repository is required" .Values.migratorImage.repository }}:{{ required "migratorImage.tag is required" .Values.migratorImage.tag }}"
           imagePullPolicy: {{ .Values.migratorImage.pullPolicy }}
+          args: ["node", "dist/migrate.cjs"]
           envFrom:
             - configMapRef:
                 name: {{ include "dingodocs.fullname" . }}-config

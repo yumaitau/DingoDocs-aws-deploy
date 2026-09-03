@@ -57,7 +57,7 @@ variable "container_image" {
 
 variable "migrator_image" {
   type        = string
-  description = "DingoDocs Marketplace migrator image pinned to a digest or immutable version tag. Floating tags are rejected."
+  description = "DingoDocs Marketplace image used with its bundled dist/migrate.cjs command. Use the same immutable reference as container_image."
 
   validation {
     condition = (

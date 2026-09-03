@@ -2,7 +2,7 @@
 
 Native CloudFormation for buyers who do not use Terraform. The stack creates a two-AZ VPC, ALB, ECS Fargate web and migration task definitions, RDS PostgreSQL 16, Secrets Manager, KMS, and a private S3 evidence bucket.
 
-Subscribe to DingoDocs on AWS Marketplace before creating the stack. Both images come from Marketplace ECR, not GHCR.
+Subscribe to DingoDocs on AWS Marketplace before creating the stack. Set both image parameters to the same immutable Marketplace ECR reference, not GHCR.
 
 ## Console
 

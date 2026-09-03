@@ -77,7 +77,7 @@ Parameters:
   MigratorImage:
     Type: String
     AllowedPattern: "^(?!.*:[Ll][Aa][Tt][Ee][Ss][Tt]$).*(@sha256:[0-9a-f]{64}|:[A-Za-z0-9][A-Za-z0-9_.-]{0,127})$"
-    Description: Marketplace migrator image tag or digest. Do not use :latest.
+    Description: Same immutable Marketplace image as ContainerImage; runs bundled dist/migrate.cjs. Do not use :latest.
 
   VpcCidr:
     Type: String
@@ -889,6 +889,8 @@ Resources:
               - license-manager:CheckInLicense
               - license-manager:CheckoutLicense
               - license-manager:ExtendLicenseConsumption
+              - license-manager:GetLicense
+              - license-manager:ListReceivedLicenses
             Resource: "*"
 
   Cluster:
@@ -1208,6 +1210,9 @@ Resources:
       ContainerDefinitions:
         - Name: migration
           Image: !Ref MigratorImage
+          Command:
+            - node
+            - dist/migrate.cjs
           Essential: true
           User: "1001:1001"
           Privileged: false

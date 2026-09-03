@@ -98,6 +98,7 @@ resource "aws_ecs_task_definition" "migration" {
       name         = "migration"
       image        = var.migrator_image
       essential    = true
+      command      = ["node", "dist/migrate.cjs"]
       portMappings = []
       environment  = concat(local.common_environment, local.ses_environment)
       secrets      = local.common_secrets

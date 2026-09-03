@@ -115,8 +115,9 @@ data "aws_iam_policy_document" "task" {
   # AWS Marketplace container contract licensing. These APIs do not support
   # resource-level permissions; AWS documents Resource "*" in
   # AWSLicenseManagerConsumptionPolicy and the container License Manager guide.
-  # CheckoutLicense validates entitlement at boot, ExtendLicenseConsumption
-  # renews the lease, and CheckInLicense releases it during orderly shutdown.
+  # CheckoutLicense validates the contract seat at boot and the non-consuming
+  # AWS::Marketplace::Usage entitlement every 15 minutes. CheckInLicense
+  # releases the startup seat during orderly shutdown.
   statement {
     sid    = "AwsMarketplaceContainerLicense"
     effect = "Allow"
@@ -124,6 +125,8 @@ data "aws_iam_policy_document" "task" {
       "license-manager:CheckInLicense",
       "license-manager:CheckoutLicense",
       "license-manager:ExtendLicenseConsumption",
+      "license-manager:GetLicense",
+      "license-manager:ListReceivedLicenses",
     ]
     resources = ["*"]
   }

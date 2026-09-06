@@ -30,7 +30,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "dingodocs.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-{{- include "dingodocs.fullname" . -}}
+{{- default (include "dingodocs.fullname" .) .Values.serviceAccount.name -}}
 {{- else -}}
 {{- default "default" .Values.serviceAccount.name -}}
 {{- end -}}

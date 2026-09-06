@@ -1,0 +1,77 @@
+# Seller-hosted install on yumait-prod EKS (ap-southeast-2).
+#
+#   helm upgrade --install dingodocs charts/dingodocs \
+#     --namespace dingodocs --create-namespace \
+#     -f charts/dingodocs/values-yumait-prod.yaml
+#
+# RDS is in the overlapping 10.80.0.0/16 VPC. Do not cut traffic until
+# PrivateLink or a DB move is in place. Service account name must stay
+# `dingodocs`.
+
+fullnameOverride: dingodocs
+replicaCount: 1
+
+image:
+  repository: 959038055523.dkr.ecr.ap-southeast-2.amazonaws.com/dingodocs/app@sha256
+  tag: "34bb5be4cf7652f2e33a76934c4b6dd01809138c645086f5ba9b6529bf56667b"
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  automount: true
+  name: dingodocs
+
+env:
+  NODE_ENV: production
+  NEXT_TELEMETRY_DISABLED: "1"
+  HOSTNAME: "0.0.0.0"
+  S3_BUCKET: dingodocs-prod-evidence-10ac01752a5d9fd7ae88324668
+  AWS_REGION: ap-southeast-2
+  S3_REGION: ap-southeast-2
+  STORAGE_PROVIDER: s3
+  CRON_TIMEZONE: Australia/Sydney
+  REQUIRE_EMAIL_VERIFICATION: "false"
+  EMAIL_PROVIDER: none
+  BETTER_AUTH_URL: http://k8s-dingodoc-dingodoc-22b981b679-863317081.ap-southeast-2.elb.amazonaws.com
+  TRUSTED_ORIGINS: http://k8s-dingodoc-dingodoc-22b981b679-863317081.ap-southeast-2.elb.amazonaws.com
+  APP_URL: http://k8s-dingodoc-dingodoc-22b981b679-863317081.ap-southeast-2.elb.amazonaws.com
+
+existingSecret: dingodocs-runtime
+
+externalSecret:
+  enabled: true
+  refreshInterval: 1h
+  secretStore:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  dataFrom:
+    - dingodocs-eks-runtime
+
+migration:
+  enabled: false
+
+web:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 384Mi
+    limits:
+      cpu: 500m
+      memory: 768Mi
+
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /api/ready
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+
+nodeSelector:
+  kubernetes.io/arch: amd64

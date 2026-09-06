@@ -57,6 +57,18 @@ existingSecret: ""
 extraEnvFrom: []
 extraEnv: []
 
+# Pull runtime secrets from AWS Secrets Manager via External Secrets Operator.
+# When enabled, set existingSecret to the target name so the chart Secret is skipped.
+externalSecret:
+  enabled: false
+  refreshInterval: 1h
+  secretStore:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  dataFrom: []
+  data: []
+
+
 web:
   command: []
   args: []
